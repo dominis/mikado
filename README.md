@@ -10,6 +10,10 @@ Mikado is a fully automated Wordpress HA infrastructure running on AWS built wit
 
 The main goal of the project is to provide a very easily buildable and maintainable but highly resilient setup for your Wordpress site.
 
+## Infrastructure overview
+
+![Mikado overview](https://github.com/dominis/mikado/blob/master/resources/mikado-infra.png)
+
 ## Quick start
 
 ### Building your base AWS infra
@@ -76,10 +80,6 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 - for the test/prod database config check out the [wp-config.php](https://github.com/dominis/wordpress.example.com/blob/develop/wp-config.php)
 - [this is the script](https://github.com/dominis/mikado/blob/master/ansible/roles/wordpress/templates/deploy_wordpress.j2) pulls the code from git every minute
 
-
-## Infrastructure overview
-
-![Mikado overview](https://github.com/dominis/mikado/blob/master/resources/mikado-infra.png)
 
 ## FAQ
 
