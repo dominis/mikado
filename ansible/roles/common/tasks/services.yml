@@ -1,0 +1,18 @@
+---
+# Enabled services
+- service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - ntpd
+
+# Disabled services
+- service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items:
+    - iptables
+  ignore_errors: True
+

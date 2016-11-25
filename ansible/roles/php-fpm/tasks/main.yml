@@ -1,0 +1,62 @@
+---
+- name: Install php-fpm and deps
+  yum:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+    - php
+    - php-fpm
+    - php-enchant
+    - php-IDNA_Convert
+    - php-mbstring
+    - php-mysql
+    - php-PHPMailer
+    - php-process
+    - php-simplepie
+    - php-xml
+    - mysql
+    - php-pecl-memcache
+    - php-pecl-redis
+    - php-pecl-imagick
+    - php-gd
+
+- name: Chown nginx /var/lib/php/session
+  file:
+    path: /var/lib/php/session
+    state: directory
+    owner: nginx
+    group: nginx
+
+- name: Remove default pool
+  file:
+    path: /etc/php-fpm.d/www.conf
+    state: absent
+
+- name: Copy php-fpm configuration
+  template:
+    src: wordpress.conf.j2
+    dest: /etc/php-fpm.d/{{ domain }}.conf
+  notify: restart php-fpm
+
+#######################
+# M O N I T O R I N G #
+#######################
+- include: ../../datadog/tasks/checks.yml
+  vars:
+    datadog_checks:
+      process:
+        init_config:
+        instances:
+          - name: php-fpm
+            search_string: [ 'php-fpm' ]
+            tags:
+              - domain:"{{ domain }}"
+      php_fpm:
+        init_config:
+        instances:
+          - status_url: http://localhost/fpm-status
+            ping_url: http://localhost/fpm-ping
+            ping_reply: pong
+            tags:
+              - domain:"{{ domain }}"
+  ignore_errors: True

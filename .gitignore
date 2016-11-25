@@ -1,0 +1,7 @@
+*.mk
+terraform.tfstate*
+terraform.tfplan
+.tfplan
+.terraform
+.packer-out.log
+.vagrant

@@ -1,0 +1,15 @@
+---
+# vars file for rsyslog (CentOS specific)
+
+rsyslog_packages:
+  - rsyslog
+rsyslog_service_name: rsyslog
+rsyslog_file_owner: root
+rsyslog_file_group: root
+rsyslog_file_create_mode: "0640"
+rsyslog_dir_create_mode: "0755"
+rsyslog_umask: "0022"
+rsyslog_priv_drop_to_user: root
+rsyslog_priv_drop_to_group: root
+rsyslog_work_directory: /var/spool/rsyslog
+rsyslog_include_config: /etc/rsyslog.d/*.conf

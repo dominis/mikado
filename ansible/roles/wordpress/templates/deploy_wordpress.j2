@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+env=$(facter --external-dir /etc/facter/facts.d/ ec2_tag_env)
+host=$(hostname)
+
+branch="develop"
+if [[ "$env" = "prod" ]]; then
+    branch="production"
+fi
+
+cd /home/deploy/{{ domain | splitext | first }}
+git remote update
+git checkout ${branch}
+
+status=$(git log HEAD..origin/${branch} --oneline)
+
+if [ "$status" ]; then
+    git pull --rebase origin ${branch}
+
+    if [[ "$env" = "prod" ]]; then
+        echo $(date +%s) > wp-content/uploads/last_deploy
+    fi
+
+    echo $(date +%s) > wp-content/uploads/last_deploy_${env}
+    echo "${host} - ${branch} {{ domain }} updated" | /usr/local/bin/slack
+fi

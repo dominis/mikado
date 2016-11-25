@@ -1,0 +1,52 @@
+---
+- user:
+    name: deploy
+    group: nginx
+    home: /home/deploy
+
+- git:
+    accept_hostkey: yes
+    clone: yes
+    dest: "/home/deploy/{{ domain }}"
+    repo: "{{ site_repo }}"
+  become_user: deploy
+
+- file:
+    path: /home/deploy/
+    state: directory
+    owner: deploy
+    mode: 0755
+
+- file:
+    src: "/mnt/{{ domain }}/uploads/"
+    dest: "/home/deploy/{{ domain }}/wp-content/uploads"
+    owner: deploy
+    group: nginx
+    force: true
+    state: link
+
+# set up wp-cli
+- get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: /usr/local/bin/wp
+    mode: 0755
+
+- name: deploy script
+  template:
+    src: deploy_wordpress.j2
+    dest: "/usr/local/bin/deploy_wordpress"
+    mode: 0755
+
+# This creates the PATH env variable for the deploy user's crontab
+- cron:
+    name: PATH
+    env: yes
+    value: /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:/home/deploy/.local/bin:/home/deploy/bin
+    user: deploy
+
+- cron:
+    name: update website
+    minute: "*/1"
+    user : "deploy"
+    job: "/usr/local/bin/deploy_wordpress"
+

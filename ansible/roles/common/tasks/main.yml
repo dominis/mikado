@@ -1,0 +1,105 @@
+---
+- include: packages.yml
+- include: services.yml
+- include: slack.yml
+  when: slack_webhook_url is defined
+
+# add our pubkeys
+- authorized_key:
+    user: ec2-user
+    key: "{{ item }}"
+  with_items:
+    - "{{ rsa_public_key }}"
+# You can add extra keys here
+# eg:
+#   - https://github.com/dominis.keys
+
+# Disable ipv6
+- sysctl:
+    name: net.ipv6.conf.all.disable_ipv6
+    value: 1
+    state: present
+    sysctl_file: /etc/sysctl.conf
+
+- template:
+    src: prompt.sh.j2
+    dest: /etc/profile.d/prompt.sh
+    owner: "root"
+    group: "root"
+    mode: 0655
+
+- template:
+    src: path.sh.j2
+    dest: /etc/profile.d/path.sh
+    owner: "root"
+    group: "root"
+    mode: 0655
+
+# ruby stuff
+- command: alternatives --set ruby /usr/bin/ruby2.3
+- command: gem install facter --no-ri --no-rdoc
+
+# This makes our automated life easier
+- lineinfile:
+    dest: /etc/ssh/ssh_config
+    line: "{{ item }}"
+  with_items:
+    - 'StrictHostKeyChecking no'
+    - 'UserKnownHostsFile /dev/null'
+
+- file:
+    name: /etc/facter/facts.d
+    recurse: yes
+    state: directory
+
+# add ec2 tags to facter
+- template:
+    src: ec2tags.sh.j2
+    dest: /etc/facter/facts.d/ec2tags.sh
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- command: /usr/local/bin/facter
+  ignore_errors: yes
+
+
+#######################
+# M O N I T O R I N G #
+#######################
+- include: ../../datadog/tasks/checks.yml
+  vars:
+    datadog_checks:
+      process:
+        init_config:
+        instances:
+          - name: ssh
+            search_string: [ 'ssh', 'sshd' ]
+            thresholds:
+              critical: [1, 7]
+              warning: [3, 5]
+      ntp:
+        init_config:
+        instances:
+          - offset_threshold: 60
+      process:
+        init_config:
+        instances:
+        - name: ssh
+          search_string: ['ssh', 'sshd']
+          tags:
+            - domain:"{{ domain }}"
+      system_core:
+        init_config:
+        instances:
+          tags:
+            - domain:"{{ domain }}"
+      network:
+        init_config:
+        instances:
+          - collect_connection_state: false
+            excluded_interfaces:
+              - lo
+              - lo0
+  ignore_errors: True
+#######################

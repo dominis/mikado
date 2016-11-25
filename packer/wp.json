@@ -1,0 +1,72 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_access_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "vpc_id": "{{env `vpc_id`}}",
+    "subnet_id": "{{env `subnet_id`}}",
+    "instance_type": "{{env `build_instance_type`}}",
+    "source_ami": "{{env `source_ami`}}",
+    "region": "{{env `TF_VAR_region`}}",
+    "security_group_id": "{{env `security_group_id`}}",
+    "domain": "{{env `domain`}}",
+    "site_repo": "{{env `site_repo`}}",
+    "efs_filesysyem_id": "{{env `efs_filesysyem_id`}}",
+    "datadog_api_key": "{{env `datadog_api_key`}}",
+    "loggly_token": "{{env `loggly_token`}}",
+    "newrelic_license_key": "{{env `newrelic_license_key`}}",
+    "slack_webhook_url": "{{env `slack_webhook_url`}}",
+    "slack_channel": "{{env `slack_channel`}}",
+    "rsa_public_key": "{{env `rsa_public_key`}}",
+    "volume_type": "io1",
+    "ebs_optimized": "true"
+  },
+  "builders": [{
+    "ami_name": "{{ user `domain` }}-{{isotime \"2006-01-02_-_15-04\"}}",
+    "type": "amazon-ebs",
+    "access_key": "{{ user `aws_access_key` }}",
+    "secret_key": "{{ user `aws_secret_access_key` }}",
+    "region": "{{ user `region` }}",
+    "source_ami": "{{ user `source_ami` }}",
+    "security_group_id": "{{ user `security_group_id` }}",
+    "instance_type": "{{ user `instance_type` }}",
+    "associate_public_ip_address": true,
+    "ami_virtualization_type": "hvm",
+    "ssh_username": "ec2-user",
+    "vpc_id": "{{ user `vpc_id` }}",
+    "subnet_id": "{{ user `subnet_id` }}",
+    "tags": {
+      "Name": "{{ user `domain` }}-{{isotime \"2006-01-02_-_15-04\"}}",
+      "Domain": "{{ user `domain` }}"
+    },
+    "communicator": "ssh",
+    "ssh_pty": true
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum-config-manager --enable epel",
+        "sudo yum update -y",
+        "sudo sudo easy_install pip",
+        "sudo pip install ansible",
+        "sudo sh -c 'echo \"$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).{{ user `efs_filesysyem_id` }}.efs.{{ user `region` }}.amazonaws.com:/    /mnt   nfs4    defaults,noatime\" >> /etc/fstab'"
+      ]
+    }, {
+      "type": "ansible-local",
+      "playbook_file": "./ansible/wp.yml",
+      "role_paths": [
+          "./ansible/roles/common",
+          "./ansible/roles/wordpress",
+          "./ansible/roles/nginx",
+          "./ansible/roles/php-fpm",
+          "./ansible/roles/datadog",
+          "./ansible/roles/rsyslog",
+          "./ansible/roles/newrelic",
+          "./ansible/roles/loggly"
+      ],
+      "extra_arguments": [
+        "-v --extra-vars \"domain='{{user `domain`}}' site_repo='{{user `site_repo`}}' rsa_public_key='{{user `rsa_public_key`}}' datadog_api_key='{{user `datadog_api_key`}}' loggly_token='{{user `loggly_token`}}' newrelic_license_key='{{user `newrelic_license_key`}}' slack_webhook_url='{{user `slack_webhook_url`}}' slack_channel='{{user `slack_channel`}}'\""
+      ]
+    }
+]
+}

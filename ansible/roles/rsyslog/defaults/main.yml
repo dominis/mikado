@@ -1,0 +1,12 @@
+---
+# defaults file for rsyslog
+
+rsyslog_repeated_msg_reduction: "on"
+rsyslog_action_file_default_template: RSYSLOG_TraditionalFileFormat
+rsyslog_klog_permit_non_kernel_facility: "on"
+rsyslog_udp_enable: false
+rsyslog_udp_address: 127.0.0.1
+rsyslog_udp_port: 514
+rsyslog_tcp_enable: false
+rsyslog_tcp_port: 514
+rsyslog_apps: []

@@ -1,0 +1,48 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  roles:
+    - {
+        role: datadog,
+        become: yes,
+        datadog_api_key: "{{ datadog_api_key }}",
+        when: datadog_api_key is defined
+    }
+    - {
+        role: rsyslog,
+        when: loggly_token is defined
+    }
+    - {
+        role: loggly,
+        loggly_token: "{{ loggly_token }}",
+        loggly_tag: "{{ domain }}",
+        when: loggly_token is defined
+    }
+    - {
+        role: common,
+        domain: "{{ domain }}",
+        slack_webhook_url: "{{ slack_webhook_url }}",
+        slack_channel: "{{ slack_channel }}",
+        rsa_public_key: "{{ rsa_public_key }}"
+    }
+    - {
+        role: nginx,
+        domain: "{{ domain }}"
+    }
+    - {
+        role: php-fpm,
+        domain: "{{ domain }}"
+    }
+    - {
+        role: wordpress,
+        domain: "{{ domain }}",
+        site_repo: "{{ site_repo }}"
+    }
+    - {
+        role: newrelic,
+        php5_newrelic_appname: "{{ domain }}",
+        newrelic_license_key: "{{ newrelic_license_key }}",
+        when: newrelic_license_key is defined
+    }

@@ -1,0 +1,68 @@
+# {{ ansible_managed }}
+server {
+  listen 80;
+
+  root /home/deploy/{{ domain }};
+  index index.php index.html index.htm;
+  access_log /var/log/nginx/access.log;
+
+  server_name www.{{ domain }};
+
+  location / {
+    try_files $uri $uri/ /index.php?q=$uri&$args;
+  }
+
+  error_page 404 /404.html;
+
+  error_page 500 502 503 504 /50x.html;
+  location = /50x.html {
+    root /usr/share/nginx/html;
+  }
+
+   location /xmlrpc.php {
+      deny all;
+    }
+
+  location ~ \.php$ {
+    fastcgi_pass unix:/var/run/php-fpm/{{ domain }}.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTP_PROXY "";
+    include fastcgi_params;
+  }
+
+  location ~* \.(ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$ {
+    expires max;
+    log_not_found off;
+    access_log off;
+  }
+
+  location = /robots.txt {
+    access_log off;
+    log_not_found off;
+  }
+
+  location ~ /\. {
+    deny all;
+    access_log off;
+    log_not_found off;
+  }
+
+  location ~ ^/(fpm-status|fpm-ping)$ {
+    access_log off;
+    allow 127.0.0.1;
+    deny all;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTP_PROXY "";
+    fastcgi_pass unix:/var/run/php-fpm/{{ domain }}.sock;
+  }
+
+  location /nginx_status {
+    access_log off;
+    allow 127.0.0.1;
+    deny all;
+    stub_status;
+  }
+
+}

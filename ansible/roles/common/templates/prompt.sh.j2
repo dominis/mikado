@@ -1,0 +1,12 @@
+name=$(/usr/local/bin/facter --external-dir /etc/facter/facts.d/ ec2_tag_name)
+instance_id=$(/usr/local/bin/facter --external-dir /etc/facter/facts.d/ ec2_instance_id)
+
+if [ $TERM == "xterm" ];
+then
+    export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${name}-${instance_id}: ${PWD}\007"'
+fi
+
+if [ "PS1" ];
+then
+    export PS1="[\u@${name} \w]\\$ "
+fi

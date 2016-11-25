@@ -1,0 +1,52 @@
+---
+# tasks file for rsyslog
+
+- include: CentOS.yml
+
+- name: Create rsyslog.conf configuration file
+  become: yes
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog
+
+- name: Create rsyslog.d configuration directory
+  become: yes
+  file:
+    path: /etc/rsyslog.d
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  tags:
+    - rsyslog
+
+- name: Create application specific configuration files
+  become: yes
+  template:
+    src: app.conf.j2
+    dest: /etc/rsyslog.d/{{ item.priority }}-{{ item.name }}.conf
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ rsyslog_apps }}"
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog
+
+- name: Ensure rsyslog service is started and enabled on boot
+  become: yes
+  service:
+    name: "{{ rsyslog_service_name }}"
+    state: started
+    enabled: yes
+  tags:
+    - rsyslog

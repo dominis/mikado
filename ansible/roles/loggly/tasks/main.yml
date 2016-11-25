@@ -1,0 +1,44 @@
+---
+# tasks file for loggly
+
+- name: Include distribution specific variables
+  include_vars: "CentOS.yml"
+  tags: loggly
+
+- include: CentOS.yml
+
+- name: Create keys directory
+  file: >
+    path=/etc/rsyslog.d/keys
+    owner=root
+    group=root
+    mode=0755
+    state=directory
+  tags: loggly
+
+- name: Create keys/ca.d directory
+  file: >
+    path=/etc/rsyslog.d/keys/ca.d
+    owner=root
+    group=root
+    mode=0755
+    state=directory
+  tags: loggly
+
+- name: certs
+  become: yes
+  template:
+    src: loggly_full.crt.j2
+    dest: /etc/rsyslog.d/keys/ca.d/loggly_full.crt
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create Loggly rsyslog configuration
+  template: >
+    src=22-loggly.conf.j2
+    dest=/etc/rsyslog.d/22-loggly.conf
+    owner=root
+    group=root
+    mode=0644
+  tags: loggly

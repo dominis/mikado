@@ -1,0 +1,33 @@
+#{{ ansible_managed }}
+user nginx;
+worker_processes  {{ ansible_processor_count }};
+
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 768;
+}
+
+http {
+    server_tokens off;
+
+    default_type text/html;
+    charset utf-8;
+
+    types_hash_max_size 2048;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay off;
+    gzip on;
+    gzip_disable "msie6";
+    server_names_hash_bucket_size 64;
+
+    error_log /var/log/nginx/error.log;
+
+    client_max_body_size 1000m;
+    client_body_timeout 3600s;
+
+    include /etc/nginx/mime.types;
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}

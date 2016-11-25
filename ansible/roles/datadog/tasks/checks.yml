@@ -1,0 +1,10 @@
+---
+- name: Create a configuration file for each Datadog check
+  template:
+    src=roles/datadog/templates/checks.yaml.j2
+    dest=/etc/dd-agent/conf.d/{{ item }}.yaml
+    owner={{ datadog_user }}
+    group={{ datadog_group }}
+  with_items: '{{ datadog_checks.keys() }}'
+  notify:
+   - restart datadog-agent

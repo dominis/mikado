@@ -1,0 +1,18 @@
+---
+# Install
+- yum:
+    pkg: "{{ item }}"
+    state: latest
+  with_items:
+    - procmail
+    - git
+    - htop
+    - jq
+    - lsof
+    - telnet
+    - strace
+    - mtr
+    - ntp
+    - ntpdate
+    - tmpwatch
+    - ruby23-devel

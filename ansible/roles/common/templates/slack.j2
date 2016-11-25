@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+message=$(cat)
+channel="${2:-{{ slack_channel }}}"
+host=$(facter --external-dir /etc/facter/facts.d/ ec2_tag_name)
+ip=$(facter --external-dir /etc/facter/facts.d/ ec2_public_ipv4)
+
+curl >/dev/null \
+    -s \
+    -X POST \
+    -d@- \
+    {{ slack_webhook_url }} << EOF
+    payload={
+        "channel": "${channel}",
+        "mrkdwn": true,
+        "username": "T-850",
+        "attachments": [{
+            "mrkdwn_in": ["text", "fallback"],
+            "fallback": "${message}",
+            "text": "${message}",
+            "fields": [
+                {
+                    "title": "host",
+                    "value": "${host}"
+                },
+                {
+                    "title": "ip",
+                    "value": "${ip}"
+                }
+            ],
+            "color": "#F35A00"
+        }],
+        "icon_emoji": ":robot_face:"
+    }
+EOF

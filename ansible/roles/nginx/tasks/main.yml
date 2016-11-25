@@ -1,0 +1,45 @@
+---
+- name: install nginx
+  yum:
+    pkg: nginx
+    state: latest
+  notify: restart nginx
+
+- name: set default nginx conf
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    mode: 0600
+  notify: reload nginx
+
+- include: vhost.yml
+
+#######################
+# M O N I T O R I N G #
+#######################
+- include: ../../datadog/tasks/checks.yml
+  vars:
+    datadog_checks:
+      process:
+        init_config:
+        instances:
+          - name: nginx
+            search_string: [ 'nginx' ]
+      nginx:
+        init_config:
+        instances:
+          - nginx_status_url: http://localhost/nginx_status/
+            tags:
+              - domain:"{{ domain }}"
+  ignore_errors: True
+#######################
+# LOGGLY      L O G S #
+#######################
+- template:
+    src: 21-nginx-loggly.conf.j2
+    dest: /etc/rsyslog.d/21-nginx-loggly.conf
+    owner: root
+    group: root
+    mode: 0644
+  ignore_errors: True

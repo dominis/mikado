@@ -1,0 +1,15 @@
+---
+- name: Create application specific configuration files
+  become: yes
+  template:
+    src: roles/rsyslog/templates/app.conf.j2
+    dest: /etc/rsyslog.d/{{ item.priority }}-{{ item.name }}.conf
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ rsyslog_apps }}"
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog

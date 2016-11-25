@@ -1,0 +1,21 @@
+---
+# wrapper script for messaging slack
+- template:
+    src: slack.j2
+    dest: /usr/local/bin/slack
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+
+# send notification on successful ssh session
+- template:
+    src: slack_ssh_notify.j2
+    dest: /usr/local/bin/slack_ssh_notify
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- lineinfile:
+    dest: /etc/pam.d/sshd
+    line: "session optional pam_exec.so seteuid /usr/local/bin/slack_ssh_notify"

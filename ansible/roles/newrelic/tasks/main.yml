@@ -1,0 +1,27 @@
+---
+- template:
+    src: newrelic.repo.j2
+    dest: /etc/yum.repos.d/newrelic.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- yum:
+    name: newrelic-php5
+    state: latest
+
+- template:
+    src: "newrelic.ini.j2"
+    dest: "/etc/php.d/newrelic.ini"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: restart newrelic
+
+- template:
+    src: "newrelic.cfg.j2"
+    dest: "/etc/newrelic/newrelic.cfg"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: restart newrelic

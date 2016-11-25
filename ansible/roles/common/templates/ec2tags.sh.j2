@@ -1,0 +1,10 @@
+#!/bin/bash
+
+instanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null)
+region=$(curl http://169.254.169.254/latest/meta-data/placement/availability-zone 2>/dev/null | sed 's/[a-z]$//g')
+
+tags=$(/usr/bin/aws ec2 describe-tags --filters "Name=resource-id,Values=${instanceId}" --region ${region} | jq '.Tags[] | "ec2_tag_" + .Key + "=" + .Value'|tr -d '"' | tr [:upper:] [:lower:])
+
+echo -ne "$tags"
+
+exit 0

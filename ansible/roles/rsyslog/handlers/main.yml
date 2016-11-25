@@ -1,0 +1,10 @@
+---
+# handlers file for rsyslog
+
+- name: restart rsyslog
+  become: yes
+  service:
+    name: "{{ rsyslog_service_name }}"
+    state: restarted
+  tags:
+    - rsyslog
