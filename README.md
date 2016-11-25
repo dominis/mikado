@@ -77,14 +77,14 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 - `develop` branch will be deployed to the test server
 - `production` branch will be deployed to the prod server
 - the `wp-contents/uploads` directory should be ignored in the `.gitignore` and shouldn't exists in the repo, a symlink is created pointing to the EFS mount here automatically
-- for the test/prod database config check out the [wp-config.php](https://github.com/dominis/wordpress.example.com/blob/develop/wp-config.php)
-- [this is the script](https://github.com/dominis/mikado/blob/master/ansible/roles/wordpress/templates/deploy_wordpress.j2) pulls the code from git every minute
+- for the test/prod database config check out the [wp-config.php](https://github.com/dominis/wordpress.example.com/blob/develop/wp-config-sample.php#L32-L36)
+- [this is the script](https://github.com/dominis/mikado/blob/master/ansible/roles/wordpress/templates/deploy_wordpress.j2) which pulls the changes from git every minute on the instances
 
 
 ## FAQ
 
 - Q: How can I ssh to my instances
-- A: The both the test and prod ELB exposes ssh, so you can simply `ssh origin.domain.com` or `ssh test.domain.com`.
+- A: The both the test and prod ELB exposes ssh, so you can simply `ssh ec2-user@origin.domain.com` or `ssh ec2-user@test.domain.com`.
 **NB:** Make sure your ip is listed in the `TF_VAR_allowed_cidrs` variable in the `env.mk` file.
 
 - Q: ???
