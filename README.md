@@ -2,7 +2,7 @@
 
 ## Intro
 
-Mikado helps you managing your AWS infrastructure for your Wordpress sites by defining an out-of-box, highly available, easy-to-deploy setup.
+Mikado helps managing your AWS infrastructure for Wordpress sites by defining an out-of-box, highly available, easy-to-deploy setup.
 
 Our goals are:
 - Provide an oversimplified but flexible and resilient one-click Wordpress deployment
