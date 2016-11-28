@@ -30,8 +30,7 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 - Uploaded assets are stored on an EFS drive
 - A Multi-AZ RDS cluster is used in the database layer
 - Route53 used to manage DNS for the site
-
-Optionally you can deploy a Fastly service for your site to cache all your requests.
+- Optionally you can deploy a Fastly service for your site to cache all your requests.
 
 ## Quick start
 
@@ -70,7 +69,7 @@ make build-ami
 make deploy-ami
 ```
 
-If you make this far you can configure your Wordpress setup. Check out the [examples](https://github.com/dominis/mikado/tree/master/examples). 
+If you make it this far you can configure your Wordpress setup. Check out the [examples](https://github.com/dominis/mikado/tree/master/examples). 
 ```
 cp examples/basic-no-fastly.tf terraform/wpexample.com.tf
 make apply
@@ -99,8 +98,7 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 ## FAQ
 
 - Q: How can I ssh to my instances
-- A: The both the test and prod ELB exposes ssh, so you can simply `ssh ec2-user@origin.domain.com` or `ssh ec2-user@test.domain.com`.
-**NB:** Make sure your ip is listed in the `TF_VAR_allowed_cidrs` variable in the `env.mk` file.
+- A: Both the test and prod ELB exposes ssh for the IP blocks in the internal SG (TF_VAR_allowed_cidrs env var), so you can simply `ssh ec2-user@origin.domain.com` or `ssh ec2-user@test.domain.com`.
 
 - Q: ???
 - A: !!!
