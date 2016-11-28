@@ -1,6 +1,19 @@
 # Mikado
 
-Mikado is a fully automated Wordpress HA infrastructure running on AWS built with [Terraform](https://terraform.io/) and [Packer](https://pakcer.io/) + [Ansible](https://www.ansible.com/) with the following services integrated optionally:
+## Intro
+
+Mikado helps you managing your AWS infrastructure for your Wordpress sites by defining an out-of-box, highly available, easy-to-deploy setup.
+
+Our goals are:
+- Provide an oversimplified but flexible and resilient one-click Wordpress deployment
+- Create a widely used standardized Wordpress infrastructure
+- Implement performance, security and infrastructure best practices out of box
+- Have automated, auditable, and idempotent configuration
+
+
+## Overview
+
+Mikado provides a fully automated way to deploy and maintain your infrastructure built with [Terraform](https://terraform.io/) and [Packer](https://packer.io/) + [Ansible](https://www.ansible.com/) with the following services integrated optionally:
 
 - [Fastly](https://fastly.com/) - CDN
 - [Statuscake](https://statuscake.com/) - external monitoring
@@ -8,17 +21,21 @@ Mikado is a fully automated Wordpress HA infrastructure running on AWS built wit
 - [Loggly](https://loggly.com/) - remote log collection
 - [Newrelic](https://newrelic.com/) - application monitoring
 
-The main goal of the project is to provide a very easily buildable and maintainable but highly resilient setup for your Wordpress site.
-
 ## Infrastructure overview
 
 ![Mikado overview](https://github.com/dominis/mikado/blob/master/resources/mikado-infra.png)
 
+- Mikado will create it's own VPC with public and private subnets in all the available Availability Zones in the selected region - providing a geo-redundant highly-available setup
+- The Wordpress site will be deployed to an Multi-AZ Auto scaling group with a set of pre-defined but fine tunable up/down scaling rules
+- Uploaded assets are stored on an EFS drive
+- A Multi-AZ RDS cluster is used in the database layer
+- Route53 used to manage DNS for the site
+
+Optionally you can deploy a Fastly service for your site to cache all your requests.
+
 ## Quick start
 
 ### Building your base AWS infra
-
-It's highly recommended creating a new AWS account for testing.
 
 Mikado provides a Vagrant instance for local development with all the dependencies installed.
 
@@ -53,24 +70,22 @@ make build-ami
 make deploy-ami
 ```
 
-If you made this far you can configure your Wordpress setup:
+If you make this far you can configure your Wordpress setup. Check out the [examples](https://github.com/dominis/mikado/tree/master/examples). 
 ```
-cp examples/all-in.tf terraform/wpexample.com.tf
+cp examples/basic-no-fastly.tf terraform/wpexample.com.tf
 make apply
 ```
 
 ### Deploying your website
 
-Mikado has a very simple automated deploy workflow based on git and its branches.
-
+Mikado has a very simple automated deploy workflow based on git and branches.
 
 You need to set the `site_repo` variable in the `env.mk` file in the following format: `https://YOUR_GITHUB_OAUTH_TOKEN:x-oauth-basic@github.com/YOUR_GITHUB_USER/wordpress.example.com.git`
 
 [More info on the token creation](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
 
-It's also recommended creating a separated user as a read-only collaborator to your site's repo
 
-Take a look at the [example repository](https://github.com/dominis/wordpress.example.com) for the wordpress files. The simplest way to start is forking this repo.
+Take a look at the [example repository](https://github.com/dominis/wordpress.example.com). The simplest way to start is forking this repo.
 
 #### Important information about the wordpress deploy process:
 
