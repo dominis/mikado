@@ -25,7 +25,7 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 
 ![Mikado overview](https://github.com/dominis/mikado/blob/master/resources/mikado-infra.png)
 
-- Mikado will create it's own VPC with public and private subnets in all the available Availability Zones in the selected region - providing a geo-redundant highly-available setup
+- Mikado will create its own VPC with public and private subnets in all the available Availability Zones in the selected region - providing a geo-redundant highly-available setup
 - The Wordpress site will be deployed to an Multi-AZ Auto scaling group with a set of pre-defined but fine tunable up/down scaling rules
 - Uploaded assets are stored on an EFS drive
 - A Multi-AZ RDS cluster is used in the database layer
