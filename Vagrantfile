@@ -5,26 +5,23 @@ VAGRANTFILE_API_VERSION = "2"
 
 $script = <<SCRIPT
 yum -y install epel-release
-yum update -y
-yum install jq make unzip ntpdate -y
-service ntpdate restart
-pip install awscli
+yum install jq make unzip ntpdate openssl-devel gcc python-devel python-pip -y
 
 cd /usr/src
-wget https://releases.hashicorp.com/terraform/0.7.12/terraform_0.7.12_linux_amd64.zip
-wget https://releases.hashicorp.com/packer/0.12.0/packer_0.12.0_linux_amd64.zip
-unzip terraform_0.7.12_linux_amd64.zip
+wget --quiet https://releases.hashicorp.com/terraform/0.7.13/terraform_0.7.13_linux_amd64.zip
+wget --quiet https://releases.hashicorp.com/packer/0.12.0/packer_0.12.0_linux_amd64.zip
+unzip terraform_0.7.13_linux_amd64.zip
 unzip packer_0.12.0_linux_amd64.zip
 mv terraform /usr/bin/
 mv packer /usr/bin/
 
-easy_install pip
+pip install -U pip
+pip install urllib3[secure]
 pip install awscli
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "bento/centos-7.1"
-  config.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.1/versions/2.2.0/providers/virtualbox.box"
   config.vm.hostname = "mikado"
 
   config.vm.provision "initial-setup", type: "shell", inline: $script
