@@ -24,7 +24,7 @@ SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "bento/centos-7.1"
-  config.vm.box_version = ">= 2.2.2"
+  config.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.1/versions/2.2.0/providers/virtualbox.box"
   config.vm.hostname = "mikado"
 
   config.vm.provision "initial-setup", type: "shell", inline: $script

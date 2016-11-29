@@ -69,7 +69,7 @@ make build-ami
 make deploy-ami
 ```
 
-If you make it this far you can configure your Wordpress setup. Check out the [examples](https://github.com/dominis/mikado/tree/master/examples). 
+If you make it this far you can configure your Wordpress setup. Check out the [examples](https://github.com/dominis/mikado/tree/master/examples).
 ```
 cp examples/basic-no-fastly.tf terraform/wpexample.com.tf
 make apply
@@ -102,3 +102,7 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 
 - Q: ???
 - A: !!!
+
+## Mailing list
+
+https://groups.google.com/forum/#!forum/mikado-dev
