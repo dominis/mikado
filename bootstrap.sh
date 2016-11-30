@@ -20,13 +20,13 @@ source_ami=$( \
     sed 's/\"//g'
 )
 
-# get the id of the wordpress vpc from your local state
+# get the id of the mikado vpc from your local state
 vpc_id=$( \
     cat terraform.tfstate | \
     jq \
         '.modules[].resources[] |
         select(.type == "aws_vpc") |
-        select(.primary.attributes["tags.Name"] == "wordpress") |
+        select(.primary.attributes["tags.Name"] == "mikado") |
         .primary.id' | \
     sed 's/\"//g'
 )

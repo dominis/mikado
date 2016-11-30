@@ -7,7 +7,7 @@ data "aws_availability_zones" "available" {}
 module "vpc" {
   source = "./tf_aws_vpc"
 
-  name = "wordpress"
+  name = "mikado"
 
   cidr = "10.0.0.0/16"
 
