@@ -6,3 +6,4 @@ terraform.tfplan
 .packer-out.log
 .vagrant
 terraform/wpexample.com.tf
+terraform-error-1480468042.log
