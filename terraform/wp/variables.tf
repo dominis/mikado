@@ -78,5 +78,5 @@ variable "health_check" {
 variable "no_cdn" {
   type        = "string"
   description = "true/false if you want to use a cdn"
-  default     = false
+  default     = true
 }

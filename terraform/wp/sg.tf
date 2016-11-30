@@ -1,4 +1,5 @@
 resource "aws_security_group" "rds" {
+  name   = "${replace(var.domain, ".", "-")}-internal-mysql"
   vpc_id = "${var.vpc_id}"
 
   ingress {
@@ -16,9 +17,13 @@ resource "aws_security_group" "rds" {
   }
 
   tags {
-    Name        = "${var.domain} database"
+    Name        = "${replace(var.domain, ".", "-")}-internal-mysql"
     Environment = "prod"
     Role        = "${var.domain}"
     Mikado      = "True"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

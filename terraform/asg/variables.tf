@@ -69,3 +69,10 @@ variable "health_check" {
   type    = "string"
   default = "HTTP:80/"
 }
+
+# this variable acn be used for limit access only from the CDN range
+variable "elb_publicly_available" {
+  type        = "string"
+  description = "true/false if the elb should be exposed to the world"
+  default     = true
+}
