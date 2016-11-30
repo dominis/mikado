@@ -15,6 +15,7 @@ module "wp-prod-asg" {
   internal_sg                 = "${var.internal_sg}"
   health_check                = "${var.health_check}"
   user_data                   = "${var.user_data}"
+  elb_publicly_available      = "${var.no_cdn}"
 }
 
 module "wp-test-asg" {
@@ -35,4 +36,12 @@ module "wp-test-asg" {
   user_data                   = "${var.user_data}"
   env                         = "test"
   health_check                = "${var.health_check}"
+}
+
+output "prod-elb_public_sg_id" {
+  value = "${module.wp-prod-asg.elb_public_sg_id}"
+}
+
+output "test-elb_public_sg_id" {
+  value = "${module.wp-test-asg.elb_public_sg_id}"
 }

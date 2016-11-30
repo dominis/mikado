@@ -5,3 +5,4 @@ terraform.tfplan
 .terraform
 .packer-out.log
 .vagrant
+terraform/wpexample.com.tf

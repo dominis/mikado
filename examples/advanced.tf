@@ -7,6 +7,7 @@ module "wp" {
   availability_zones = "${module.vpc.availability_zones}"
   vpc_id             = "${module.vpc.vpc_id}"
   db_pass            = "l33tp455"
+  no_cdn             = false
 
   # here you can set the instance types
   prod_instance_type     = "t2.medium"

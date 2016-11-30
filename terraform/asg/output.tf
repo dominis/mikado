@@ -17,3 +17,7 @@ output "scaling_policy_down" {
 output "scaling_policy_up" {
   value = "${aws_autoscaling_policy.policy-up.arn}"
 }
+
+output "elb_public_sg_id" {
+  value = "${aws_security_group.asg-public-http.id}"
+}

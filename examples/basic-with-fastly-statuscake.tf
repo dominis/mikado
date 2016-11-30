@@ -6,6 +6,7 @@ module "wp" {
   internal_sg        = "${module.sg.internal_sg_id}"
   availability_zones = "${module.vpc.availability_zones}"
   db_pass            = "superPass34234"
+  no_cdn             = false
 }
 
 module "wp-fastly" {
