@@ -1,5 +1,6 @@
 resource "aws_db_instance" "wp-prod" {
   identifier                 = "${replace(var.domain, ".", "-")}"
+  count                      = "${var.create_prod_db}"
   allocated_storage          = "10"
   engine                     = "mysql"
   engine_version             = "5.7.11"

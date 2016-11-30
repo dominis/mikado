@@ -78,10 +78,11 @@ resource "aws_route53_record" "int-ns" {
   ]
 }
 
-resource "aws_route53_record" "rds" {
+resource "aws_route53_record" "prod-rds" {
   zone_id = "${aws_route53_zone.int.zone_id}"
   name    = "prod.db.int.${var.domain}"
   type    = "A"
+  count   = "${var.create_prod_db}"
 
   alias {
     name                   = "${aws_db_instance.wp-prod.address}"
@@ -94,6 +95,8 @@ resource "aws_route53_record" "test-rds" {
   zone_id = "${aws_route53_zone.int.zone_id}"
   name    = "test.db.int.${var.domain}"
   type    = "A"
+
+  count = "${var.create_test_db}"
 
   alias {
     name                   = "${aws_db_instance.wp-test.address}"

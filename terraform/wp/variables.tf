@@ -39,6 +39,11 @@ variable "create_test_db" {
   default = true
 }
 
+variable "create_prod_db" {
+  type    = "string"
+  default = true
+}
+
 variable "domain" {
   type = "string"
 }
