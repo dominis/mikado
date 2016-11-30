@@ -100,8 +100,12 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 - Q: How can I ssh to my instances
 - A: Both the test and prod ELB exposes ssh for the IP blocks in the internal SG (TF_VAR_allowed_cidrs env var), so you can simply `ssh ec2-user@origin.domain.com` or `ssh ec2-user@test.domain.com`.
 
-- Q: ???
-- A: !!!
+
+- Q: The following error is thrown during `vagrant up`:
+    _The box 'bento/centos-7.1' could not be found or could not be accessed in the remote catalog. If this is a private box on HashiCorp's Atlas, please verify you're logged in via `vagrant login`. Also, please double-check the name. The expanded URL and error message are shown below:_ (sic!)
+- A: On version 1.8.7 the embedded curl Vagrant uses had a [bug](https://github.com/mitchellh/vagrant/issues/7969). 
+    Workaround for v1.8.7: `sudo rm -rf /opt/vagrant/embedded/bin/curl`
+    Or, update Vagrant to v1.8.8
 
 ## Mailing list
 
