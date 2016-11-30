@@ -4,7 +4,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_user" "loggly" {
-  name = "loggly"
+  name = "loggly-${data.aws_caller_identity.current.account_id}"
 }
 
 resource "aws_iam_access_key" "loggly" {
@@ -12,7 +12,7 @@ resource "aws_iam_access_key" "loggly" {
 }
 
 resource "aws_iam_user_policy" "loggly" {
-  name = "loggly"
+  name = "loggly-${data.aws_caller_identity.current.account_id}"
   user = "${aws_iam_user.loggly.name}"
 
   policy = <<EOF

@@ -1,12 +1,14 @@
 # DataDog read only IAM permissions
 
+data "aws_caller_identity" "current" {}
+
 variable "external_id" {
   type        = "string"
   description = "DD external id"
 }
 
 resource "aws_iam_policy" "datadog_readonly" {
-  name = "DataDog_ReadOnly"
+  name = "DataDog_ReadOnly-${data.aws_caller_identity.current.account_id}"
 
   policy = <<EOF
 {
@@ -51,7 +53,7 @@ EOF
 }
 
 resource "aws_iam_role" "datadog_assumerole" {
-  name = "DataDog_ReadOnly"
+  name = "DataDog_ReadOnly-${data.aws_caller_identity.current.account_id}"
 
   assume_role_policy = <<EOF
 {
@@ -75,7 +77,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "datadog" {
-  name       = "DataDog"
+  name       = "DataDog-${data.aws_caller_identity.current.account_id}"
   roles      = ["${aws_iam_role.datadog_assumerole.name}"]
   policy_arn = "${aws_iam_policy.datadog_readonly.arn}"
 }
