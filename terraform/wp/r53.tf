@@ -1,5 +1,9 @@
 resource "aws_route53_zone" "domain" {
   name = "${var.domain}"
+
+  tags {
+    Mikado = "True"
+  }
 }
 
 resource "aws_route53_record" "apex" {
@@ -48,6 +52,59 @@ resource "aws_route53_record" "test" {
   }
 }
 
+##############
+# Internal DNS
+##############
+resource "aws_route53_zone" "int" {
+  name   = "int.${var.domain}"
+  vpc_id = "${var.vpc_id}"
+
+  tags {
+    Mikado = "True"
+  }
+}
+
+resource "aws_route53_record" "int-ns" {
+  zone_id = "${aws_route53_zone.domain.zone_id}"
+  name    = "int.${var.domain}"
+  type    = "NS"
+  ttl     = "30"
+
+  records = [
+    "${aws_route53_zone.int.name_servers.0}",
+    "${aws_route53_zone.int.name_servers.1}",
+    "${aws_route53_zone.int.name_servers.2}",
+    "${aws_route53_zone.int.name_servers.3}",
+  ]
+}
+
+resource "aws_route53_record" "rds" {
+  zone_id = "${aws_route53_zone.int.zone_id}"
+  name    = "prod.db.int.${var.domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_db_instance.wp-prod.address}"
+    zone_id                = "${aws_db_instance.wp-prod.hosted_zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "test-rds" {
+  zone_id = "${aws_route53_zone.int.zone_id}"
+  name    = "test.db.int.${var.domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_db_instance.wp-test.address}"
+    zone_id                = "${aws_db_instance.wp-test.hosted_zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+##########
+# Outputs
+##########
 output "nameservers" {
   value = "${join(", ", aws_route53_zone.domain.name_servers)}"
 }
