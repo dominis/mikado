@@ -24,10 +24,11 @@ module "wp" {
 }
 
 module "wp-fastly" {
-  source         = "./wp-fastly"
-  domain         = "wpexample.com"
-  domain_zone_id = "${module.wp.route53_zone_id}"
-  api_key        = "${var.fastly_api_key}"
+  source           = "./wp-fastly"
+  domain           = "wpexample.com"
+  domain_zone_id   = "${module.wp.route53_zone_id}"
+  api_key          = "${var.fastly_api_key}"
+  elb_public_sg_id = "${module.wp.prod-elb_public_sg_id}"
 }
 
 module "wp-statuscake" {
