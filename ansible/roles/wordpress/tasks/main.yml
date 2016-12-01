@@ -46,7 +46,7 @@
 
 - cron:
     name: update website
-    minute: "*/1"
+    minute: "*"
     user : "deploy"
     job: "/usr/local/bin/deploy_wordpress"
 

@@ -67,6 +67,12 @@
       "extra_arguments": [
         "-v --extra-vars \"domain='{{user `domain`}}' site_repo='{{user `site_repo`}}' rsa_public_key='{{user `rsa_public_key`}}' datadog_api_key='{{user `datadog_api_key`}}' loggly_token='{{user `loggly_token`}}' newrelic_license_key='{{user `newrelic_license_key`}}' slack_webhook_url='{{user `slack_webhook_url`}}' slack_channel='{{user `slack_channel`}}'\""
       ]
-    }
-]
+    }, {
+      "type": "file",
+      "source": "tests",
+      "destination": "/tmp"
+    }, {
+      "type": "shell",
+      "script": "scripts/serverspec.sh"
+  }]
 }
