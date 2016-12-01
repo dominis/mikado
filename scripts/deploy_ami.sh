@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+source ./mikado.conf
+
 if [ -z "$TF_VAR_region" ]; then
     echo "Please run make deploy-ami instead."
     exit 1

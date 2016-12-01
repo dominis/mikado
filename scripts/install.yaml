@@ -1,0 +1,133 @@
+dialogs:
+  errors:
+    missing_data: |
+      Missing data!
+
+      All fields all mandatory, please start again.
+  welcome: |
+    Hello,
+
+    I'm Mikado installer, I'll help you set up your Wordpress site on AWS.
+  tfbase: |
+    Now we set up your base infra for Mikado on AWS.
+
+    - A VPC with public and private subnets in all AZs
+    - A security group with the provided CIDR block
+    - An EFS storage for your Wordpress uploads
+    - Enabling cloudtrail + a new s3 bucket for your logs
+    - Optionally Datadog and Loggly read-only IAM roles
+  amibuild: |
+    Now we are going to provision the instance which will be used to serve the website
+
+    - This will start a temporaly EC2 instance
+    - Apply the roles from the ansible directory
+    - Save the AMI
+  tfmikado: |
+    Now everything is ready so we can start building the resources for your Wordpress site
+
+    Get a coffee... This will take about 15 minutes.
+  success: |
+    If you see this message it means everything is honky-donkey
+
+  optional:
+    title: Please select the components you want to install
+    msg: All options are optional
+    components:
+      - Fastly
+      - Statuscake
+      - Datadog
+      - Loggly
+      - Newrelic
+      - Slack
+  Mikado:
+    AWS_ACCESS_KEY_ID:
+      msg: |
+        Please enter your AWS access key id
+
+        More info: https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/
+    AWS_SECRET_ACCESS_KEY:
+      msg: |
+        Please enter your AWS secret access key
+
+        More info: https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/
+    TF_VAR_region:
+      msg: |
+        Please enter the AWS region you want to deploy your application
+
+        Available regions: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+      default: us-east-1
+    domain:
+      msg: |
+        Plese enter the domain name of the site you want to deploy
+      default: wp-example.com
+    TF_VAR_allowed_cidrs:
+      msg: |
+        Please enter a comma separated list of CIDR blocks you want provide ssh access to your instances
+      default: "@@@cidr@@@"
+    rsa_public_key:
+      msg: |
+        Please enter your rsa pubic key here
+    site_repo:
+      msg: |
+        Please enter the git repo for your site
+
+        More info: https://github.com/dominis/wmikado#deploying-your-website
+      default: https://github.com/dominis/wordpress.example.com.git
+    build_instance_type:
+      msg: |
+        Instance type you want to use for your Packer builds
+
+        More info: https://github.com/dominis/mikado/blob/master/env.mk.template#L28-L31
+      default: t2.micro
+  Fastly:
+    TF_VAR_fastly_api_key:
+      msg: |
+        Please enter your Fastly API key
+
+        You can find it at: https://manage.fastly.com/account
+  Statuscake:
+    TF_VAR_statuscake_username:
+      msg: |
+        Please enter your Statuscake username
+    TF_VAR_statuscake_apikey:
+      msg: |
+        Please enter your Statuscake API key
+
+        You can find it at: https://app.statuscake.com/APIKey.php
+  Datadog:
+    datadog_api_key:
+      msg: |
+        Please enter your Datadog API key
+
+        You can find it at: https://app.datadoghq.com/account/settings#api
+    TF_VAR_datadog_external_id:
+      msg: |
+        Please enter your Datadog AWS external id
+
+        You can find it at: # https://app.datadoghq.com/account/settings#integrations/amazon_web_services
+  Loggly:
+    loggly_token:
+      msg: |
+        Please enter your Loggly token
+
+        You can find it at: https://ACCOUNT.loggly.com/tokens
+  Newrelic:
+    newrelic_license_key:
+      msg: |
+        Please enter your Newrelic license key
+
+        You can find it at: https://rpm.newrelic.com/accounts/
+  Slack:
+    slack_webhook_url:
+      msg: |
+        Please enter your Slack webhook url
+
+        You can find it at: https://YOURACCOUNT.slack.com/apps/A0F7XDUAZ-incoming-webhooks
+    slack_channel:
+      msg: |
+        Please enter the Slack channel you want to post noficiations
+
+        eg: #mikado-rulez
+
+
+
