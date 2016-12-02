@@ -10,14 +10,6 @@ module "wp" {
   no_cdn             = false
 }
 
-module "wp-fastly" {
-  source           = "./wp-fastly"
-  domain           = "###DOMAIN###"
-  domain_zone_id   = "${module.wp.route53_zone_id}"
-  api_key          = "${var.fastly_api_key}"
-  elb_public_sg_id = "${module.wp.prod-elb_public_sg_id}"
-}
-
 module "wp-statuscake" {
   source   = "./wp-statuscake"
   domain   = "###DOMAIN###"

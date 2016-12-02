@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+source ./mikado.conf
+
 # we need to query aws api for the available azs in the region and feed it to tf
 az_count=$( \
     aws ec2 describe-availability-zones \
@@ -54,8 +56,8 @@ efs_filesysyem_id=$( \
 )
 
 # print out the result in makefile format
-echo "export source_ami:=${source_ami}"
-echo "export vpc_id:=${vpc_id}"
-echo "export subnet_id:=${subnet_id}"
-echo "export efs_filesysyem_id:=${efs_filesysyem_id}"
-echo "export TF_VAR_az_count:=${az_count}"
+echo "export source_ami=${source_ami}"
+echo "export vpc_id=${vpc_id}"
+echo "export subnet_id=${subnet_id}"
+echo "export efs_filesysyem_id=${efs_filesysyem_id}"
+echo "export TF_VAR_az_count=${az_count}"

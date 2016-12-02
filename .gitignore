@@ -7,3 +7,9 @@ terraform.tfplan
 .vagrant
 terraform/wpexample.com.tf
 terraform-error-1480468042.log
+.mikado
+mikado.conf
+mikado.conf.dev
+__pycache__
+*.pyc
+.DS_Store

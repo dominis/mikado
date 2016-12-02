@@ -1,21 +1,24 @@
-.ONESHELL:
 .PHONY: build-ami deploy-ami plan apply destroy graph clean
 
--include env.mk
--include bootstrap_tmp.mk
+-include .mikado.conf.mk
+-include .aws_data.mk
+
+.mikado.conf.mk:
+	@cat mikado.conf | sed 's/"//g ; s/=/:=/' > .mikado.conf.mk
+
+.aws_data.mk:
+	@bash ./scripts/aws_data.sh | sed 's/"//g ; s/=/:=/' > .aws_data.mk
 
 update:
 	@terraform get ./terraform
-
-bootstrap_tmp.mk:
-	@bash bootstrap.sh > bootstrap_tmp.mk
 
 build-ami:
 	@packer build packer/wp.json 2>&1 | tee .packer-out.log
 	@$(MAKE) clean
 
 deploy-ami:
-	@bash deploy_ami.sh
+	@bash ./scripts/deploy_ami.sh
+	@$(MAKE) clean
 
 # This target executes the terraform plan stage
 # This will not change anything in you AWS setup only displays the changes
@@ -53,4 +56,5 @@ destroy: update
 clean:
 	@rm -rf ./.tmp
 	@rm -rf ./.terraform
-	@rm -rf ./bootstrap_tmp.mk
+	@rm -f ./.mikado.conf.mk
+	@rm -f ./.aws_data.mk

@@ -4,10 +4,10 @@
 
 Mikado helps managing your AWS infrastructure for Wordpress sites by defining an out-of-box, highly available, easy-to-deploy setup.
 
-Our goals are:
+The project goals are:
 - Provide an oversimplified but flexible and resilient one-click Wordpress deployment
 - Create a widely used standardized Wordpress infrastructure
-- Implement performance, security and infrastructure best practices out of box
+- Implement performance, security and infrastructure best practices
 - Have automated, auditable, and idempotent configuration
 
 
@@ -34,46 +34,24 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 
 ## Quick start
 
+```
+curl -s https://raw.githubusercontent.com/dominis/mikado/master/scripts/mikado-boom | sh
+```
+
 ### Building your base AWS infra
 
 Mikado provides a Vagrant instance for local development with all the dependencies installed.
 
-Get the latest version of mikado:
-```
-git clone http://github.com/dominis/mikado
-cd mikado
-```
+Also a dialog based installer provided.
 
-Start the vagrant instance, for this you need to [install vagrant](https://www.vagrantup.com/docs/installation/) first:
-```
-vagrant up
-vagrant ssh
-cd mikado
-```
+![installer](https://cloud.githubusercontent.com/assets/157738/20834138/cb8d69cc-b893-11e6-9abc-d3d48dc32b43.png)
+![installer](https://cloud.githubusercontent.com/assets/157738/20834140/cb906384-b893-11e6-860f-4742cd1668bc.png)
+![installer](https://cloud.githubusercontent.com/assets/157738/20834141/cb908008-b893-11e6-95e5-4a936874845e.png)
+![installer](https://cloud.githubusercontent.com/assets/157738/20834137/cb8c66a8-b893-11e6-9cba-df01e8eaac01.png)
+![installer](https://cloud.githubusercontent.com/assets/157738/20834139/cb8de0a0-b893-11e6-995f-3bd7e0b60b16.png)
+![installer](https://cloud.githubusercontent.com/assets/157738/20834136/cb8c2940-b893-11e6-97f8-289e902a68ee.png)
+![installer](https://cloud.githubusercontent.com/assets/157738/20837059/9b65aa3e-b8a2-11e6-892a-82a0e8083ab3.png)
 
-You need to create your env file for your credentials:
-```
-cp env.mk.template env.mk
-vim env.mk
-```
-
-Once you done you can run terraform to build the base infrastructure:
-```
-make apply
-```
-This will create a VPC in the selected region with public and private subnets in all available Availability Zones. This is needed for the next step.
-
-At this point you will be able to create the image for your application servers. This step will start a new EC2 instance in one of your subnets and will provision it by using Ansible. If the process is successful an [AMI](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) will be created. This will be the base for your servers in the Auto Scaling Groups.
-```
-make build-ami
-make deploy-ami
-```
-
-If you make it this far you can configure your Wordpress setup. Check out the [examples](https://github.com/dominis/mikado/tree/master/examples).
-```
-cp examples/basic-no-fastly.tf terraform/wpexample.com.tf
-make apply
-```
 
 ### Deploying your website
 
@@ -103,7 +81,7 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 
 - Q: The following error is thrown during `vagrant up`:
     _The box 'bento/centos-7.1' could not be found or could not be accessed in the remote catalog. If this is a private box on HashiCorp's Atlas, please verify you're logged in via `vagrant login`. Also, please double-check the name. The expanded URL and error message are shown below:_ (sic!)
-- A: On version 1.8.7 the embedded curl Vagrant uses had a [bug](https://github.com/mitchellh/vagrant/issues/7969). 
+- A: On version 1.8.7 the embedded curl Vagrant uses had a [bug](https://github.com/mitchellh/vagrant/issues/7969).
     Workaround for v1.8.7: `sudo rm -rf /opt/vagrant/embedded/bin/curl`
     Or, update Vagrant to v1.8.8
 

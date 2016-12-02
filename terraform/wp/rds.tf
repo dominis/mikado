@@ -5,8 +5,8 @@ resource "aws_db_instance" "wp-prod" {
   engine                     = "mysql"
   engine_version             = "5.7.11"
   instance_class             = "${var.prod_rds_instance_type}"
-  name                       = "${replace(var.domain, ".", "")}"
-  username                   = "${replace(var.domain, ".", "")}"
+  name                       = "${replace(var.domain, "/[^a-z0-9]+/", "")}"
+  username                   = "${replace(var.domain, "/[^a-z0-9]+/", "")}"
   password                   = "${var.db_pass}"
   backup_retention_period    = "30"
   backup_window              = "04:00-04:30"
@@ -19,7 +19,7 @@ resource "aws_db_instance" "wp-prod" {
   storage_type               = "gp2"
 
   tags {
-    Name        = "${var.domain}"
+    Name        = "${replace(var.domain, ".", "")}"
     Environment = "prod"
     Role        = "${var.domain}"
     Mikado      = "True"
@@ -27,7 +27,7 @@ resource "aws_db_instance" "wp-prod" {
 }
 
 resource "aws_db_subnet_group" "wp" {
-  name        = "${replace(var.domain, ".", "-")}"
+  name        = "${replace(var.domain, ".", "")}"
   description = "wp rds"
   subnet_ids  = ["${var.private_subnets}"]
 }
@@ -40,8 +40,8 @@ resource "aws_db_instance" "wp-test" {
   engine                     = "mysql"
   engine_version             = "5.7.11"
   instance_class             = "${var.test_rds_instance_type}"
-  name                       = "test${replace(var.domain, ".", "")}"
-  username                   = "${replace(var.domain, ".", "")}"
+  name                       = "test${replace(var.domain, "/[^a-z0-9]+/", "")}"
+  username                   = "${replace(var.domain, "/[^a-z0-9]+/", "")}"
   password                   = "${var.db_pass}"
   backup_retention_period    = "30"
   backup_window              = "04:00-04:30"
@@ -54,7 +54,7 @@ resource "aws_db_instance" "wp-test" {
   storage_type               = "gp2"
 
   tags {
-    Name        = "test.${var.domain}"
+    Name        = "test-${replace(var.domain, ".", "")}"
     Environment = "test"
     Role        = "test.${var.domain}"
     Mikado      = "True"
