@@ -160,7 +160,7 @@ def install():
 
     execute('make apply')
 
-    d.info('success')
+    d_info('success')
 
 
 def main():
