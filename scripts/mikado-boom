@@ -1,5 +1,5 @@
 #!/bin/bash
-git clone https://github.com/dominis/install
+git clone https://github.com/dominis/mikado
 cd mikado
 vagrant up
 vagrant ssh -c 'cd mikado; ./scripts/install.py'
