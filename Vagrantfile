@@ -36,6 +36,9 @@ curl https://bootstrap.pypa.io/get-pip.py | python3.4
 pip3 install pythondialog
 pip3 install pyyaml
 
+# this is a workaround for the dialog bug
+echo 'export TERM=xterm' >> /home/vagrant/bashrc
+
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
