@@ -37,7 +37,7 @@ pip3 install pythondialog
 pip3 install pyyaml
 
 # this is a workaround for the dialog bug
-echo 'export TERM=xterm' >> /home/vagrant/bashrc
+echo 'export TERM=xterm' >> /home/vagrant/.bashrc
 
 SCRIPT
 
