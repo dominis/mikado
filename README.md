@@ -34,6 +34,10 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 
 ## Quick start
 
+```
+curl -s https://raw.githubusercontent.com/dominis/mikado/master/scripts/mikado-boom | sh
+```
+
 ### Building your base AWS infra
 
 Mikado provides a Vagrant instance for local development with all the dependencies installed.
@@ -48,15 +52,6 @@ Also a dialog based installer provided.
 ![installer](https://cloud.githubusercontent.com/assets/157738/20834136/cb8c2940-b893-11e6-97f8-289e902a68ee.png)
 ![installer](https://cloud.githubusercontent.com/assets/157738/20837059/9b65aa3e-b8a2-11e6-892a-82a0e8083ab3.png)
 
-
-```
-git clone http://github.com/dominis/mikado
-cd mikado
-vagrant up
-vagrant ssh
-cd mikado
-./scripts/install.py
-```
 
 ### Deploying your website
 
