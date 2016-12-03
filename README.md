@@ -35,7 +35,7 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 ## Quick start
 
 ```
-curl -s https://raw.githubusercontent.com/dominis/mikado/master/scripts/mikado-boom | sh
+curl -s https://raw.githubusercontent.com/dominis/mikado/master/scripts/mikado-boom > /tmp/mikado-boom ; bash /tmp/mikado-boom
 ```
 
 ### Building your base AWS infra
