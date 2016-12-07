@@ -2,11 +2,11 @@
 
 ## Intro
 
-Mikado helps managing your AWS infrastructure for Wordpress sites by defining an out-of-box, highly available, easy-to-deploy setup.
+Mikado helps managing your AWS infrastructure for WordPress sites by defining an out-of-box, highly available, easy-to-deploy setup.
 
 The project goals are:
-- Provide an oversimplified but flexible and resilient one-click Wordpress deployment
-- Create a widely used standardized Wordpress infrastructure
+- Provide an oversimplified but flexible and resilient one-click WordPress deployment
+- Create a widely used standardized WordPress infrastructure
 - Implement performance, security and infrastructure best practices
 - Have automated, auditable, and idempotent configuration
 
@@ -26,7 +26,7 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 ![Mikado overview](https://github.com/dominis/mikado/blob/master/resources/mikado-infra.png)
 
 - Mikado will create its own VPC with public and private subnets in all the available Availability Zones in the selected region - providing a geo-redundant highly-available setup
-- The Wordpress site will be deployed to an Multi-AZ Auto scaling group with a set of pre-defined but fine tunable up/down scaling rules
+- The WordPress site will be deployed to an Multi-AZ Auto scaling group with a set of pre-defined but fine tunable up/down scaling rules
 - Uploaded assets are stored on an EFS drive
 - A Multi-AZ RDS cluster is used in the database layer
 - Route53 used to manage DNS for the site
@@ -64,7 +64,7 @@ You need to set the `site_repo` variable in the `env.mk` file in the following f
 
 Take a look at the [example repository](https://github.com/dominis/wordpress.example.com). The simplest way to start is forking this repo.
 
-#### Important information about the wordpress deploy process:
+#### Important information about the WordPress deploy process:
 
 - `develop` branch will be deployed to the test server
 - `production` branch will be deployed to the prod server

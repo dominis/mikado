@@ -7,13 +7,13 @@ dialogs:
   welcome: |
     Hello,
 
-    I'm Mikado installer, I'll help you set up your Wordpress site on AWS.
+    I'm Mikado installer, I'll help you set up your WordPress site on AWS.
   tfbase: |
     Now we set up your base infra for Mikado on AWS.
 
     - A VPC with public and private subnets in all AZs
     - A security group with the provided CIDR block
-    - An EFS storage for your Wordpress uploads
+    - An EFS storage for your WordPress uploads
     - Enabling cloudtrail + a new s3 bucket for your logs
     - Optionally Datadog and Loggly read-only IAM roles
   amibuild: |
@@ -23,7 +23,7 @@ dialogs:
     - Apply the roles from the ansible directory
     - Save the AMI
   tfmikado: |
-    Now everything is ready so we can start building the resources for your Wordpress site
+    Now everything is ready so we can start building the resources for your WordPress site
 
     Get a coffee... This will take about 15 minutes.
   success: |
