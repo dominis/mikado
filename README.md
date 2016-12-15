@@ -38,8 +38,6 @@ Mikado provides a fully automated way to deploy and maintain your infrastructure
 curl -s https://raw.githubusercontent.com/dominis/mikado/master/scripts/mikado-boom > /tmp/mikado-boom ; bash /tmp/mikado-boom
 ```
 
-### Building your base AWS infra
-
 Mikado provides a Vagrant instance for local development with all the dependencies installed.
 
 Also a dialog based installer provided.
@@ -52,12 +50,52 @@ Also a dialog based installer provided.
 ![installer](https://cloud.githubusercontent.com/assets/157738/20834136/cb8c2940-b893-11e6-97f8-289e902a68ee.png)
 ![installer](https://cloud.githubusercontent.com/assets/157738/20837059/9b65aa3e-b8a2-11e6-892a-82a0e8083ab3.png)
 
+### Manual setup
+
+If you don't want to use the installer or you want more control of what's happening you can run the following steps:
+
+```
+git clone https://github.com/dominis/mikado.git
+cd mikado
+
+# create your configuration
+cp mikado.conf.example mikado.conf
+vi mikado.conf
+
+# now you can build the base infra
+# this will create a VPC with subnets, IAM roles, trusted SG, EFS storage for the uploads
+# more info in terraform/base*.tf
+# NB terraform always called through make because of the config
+make apply
+
+
+# the next step is building your first AMI
+# this image will be used in the Auto Scaling Group
+make build-ami
+
+# at this point you need to deploy this AMI to your production ASG
+# this step is only needed because you need an AMI id to be able to create the ASG
+# in the future you can create a new AMI and only deploy it to the test ASG
+# more info at: https://github.com/dominis/mikado#working-with-the-amis
+make deploy-ami
+
+# go to the examples directory and find a config suitable for you
+cp examples/basic.tf terraform/mydomain.tf
+sed -i -e "s|###DOMAIN###|mydomain.com|g" terraform/mydomain.tf
+
+make apply
+
+# Apply complete! Resources: 45 added, 0 changed, 0 destroyed.
+# 👏 🍾
+```
+
+
 
 ### Deploying your website
 
 Mikado has a very simple automated deploy workflow based on git and branches.
 
-You need to set the `site_repo` variable in the `env.mk` file in the following format: `https://YOUR_GITHUB_OAUTH_TOKEN:x-oauth-basic@github.com/YOUR_GITHUB_USER/wordpress.example.com.git`
+You need to set the `site_repo` variable in your `mikado.conf` file in the following format: `https://YOUR_GITHUB_OAUTH_TOKEN:x-oauth-basic@github.com/YOUR_GITHUB_USER/wordpress.example.com.git`
 
 [More info on the token creation](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
 
@@ -72,6 +110,11 @@ Take a look at the [example repository](https://github.com/dominis/wordpress.exa
 - for the test/prod database config check out the [wp-config.php](https://github.com/dominis/wordpress.example.com/blob/develop/wp-config-sample.php#L32-L36)
 - [this is the script](https://github.com/dominis/mikado/blob/master/ansible/roles/wordpress/templates/deploy_wordpress.j2) which pulls the changes from git every minute on the instances
 
+### Working with AMIs
+
+With `make build-ami` you can generate new AMIs and with running `make apply` the latest AMI will be rolled out to the `test` ASG.
+
+If you happy with the result on your test site you can run `make deploy-ami` to tag the AMI as production ready and with `make apply` you can initiate a rolling update on your production ASG.
 
 ## FAQ
 
