@@ -76,7 +76,7 @@ make build-ami
 # at this point you need to deploy this AMI to your production ASG
 # this step is only needed because you need an AMI id to be able to create the ASG
 # in the future you can create a new AMI and only deploy it to the test ASG
-# more info at: https://github.com/dominis/mikado#working-with-the-amis
+# more info at: https://github.com/dominis/mikado#working-with-amis
 make deploy-ami
 
 # go to the examples directory and find a config suitable for you
