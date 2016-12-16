@@ -1,6 +1,6 @@
 module "wp" {
   source             = "./wp"
-  domain             = "wpexample.com"
+  domain             = "###DOMAIN###"
   public_subnets     = "${module.vpc.public_subnets}"
   private_subnets    = "${module.vpc.private_subnets}"
   internal_sg        = "${module.sg.internal_sg_id}"
@@ -25,7 +25,7 @@ module "wp" {
 
 module "wp-fastly" {
   source           = "./wp-fastly"
-  domain           = "wpexample.com"
+  domain           = "###DOMAIN###"
   domain_zone_id   = "${module.wp.route53_zone_id}"
   api_key          = "${var.fastly_api_key}"
   elb_public_sg_id = "${module.wp.prod-elb_public_sg_id}"
@@ -33,7 +33,7 @@ module "wp-fastly" {
 
 module "wp-statuscake" {
   source   = "./wp-statuscake"
-  domain   = "wpexample.com"
+  domain   = "###DOMAIN###"
   username = "${var.statuscake_username}"
   apikey   = "${var.statuscake_apikey}"
 }
