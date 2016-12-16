@@ -19,10 +19,6 @@ server {
     root /usr/share/nginx/html;
   }
 
-   location /xmlrpc.php {
-      deny all;
-    }
-
   location ~ \.php$ {
     fastcgi_pass unix:/var/run/php-fpm/{{ domain }}.sock;
     fastcgi_index index.php;
@@ -48,6 +44,25 @@ server {
     log_not_found off;
   }
 
+  # security
+  location ~* /(?:uploads|files)/.*.php$ {
+    deny all;
+  }
+
+  location ~* .(engine|inc|info|install|make|module|profile|test|po|sh|.*sql|theme|tpl(.php)?|xtmpl)$|^(..*|Entries.*|Repository|Root|Tag|Template)$|.php_ {
+    return 444;
+  }
+
+  location ~* .(pl|cgi|py|sh|lua)$ {
+    return 444;
+  }
+
+  location ~ /(.|wp-config.php|wp-comments-post.php|readme.html|license.txt|xmlrpc.php) {
+    deny all;
+  }
+
+
+  # Status endponts
   location ~ ^/(fpm-status|fpm-ping)$ {
     access_log off;
     allow 127.0.0.1;
