@@ -13,7 +13,7 @@ export DEBCONF_NONINTERACTIVE_SEEN=true
 APT_OPTS="--assume-yes --no-install-suggests --no-install-recommends -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\""
 echo "Upgrading packages ..."
 apt-get update ${APT_OPTS} >/dev/null 2>&1
-apt-get upgrade ${APT_OPTS} >/dev/null 2>&1
+#apt-get upgrade ${APT_OPTS} >/dev/null 2>&1
 echo "Installing prerequisites ..."
 apt-get install ${APT_OPTS} \
   build-essential \
