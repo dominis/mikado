@@ -42,13 +42,7 @@ Mikado provides a Vagrant instance for local development with all the dependenci
 
 Also a dialog based installer provided.
 
-![installer](https://cloud.githubusercontent.com/assets/157738/20834138/cb8d69cc-b893-11e6-9abc-d3d48dc32b43.png)
-![installer](https://cloud.githubusercontent.com/assets/157738/20834140/cb906384-b893-11e6-860f-4742cd1668bc.png)
-![installer](https://cloud.githubusercontent.com/assets/157738/20834141/cb908008-b893-11e6-95e5-4a936874845e.png)
-![installer](https://cloud.githubusercontent.com/assets/157738/20834137/cb8c66a8-b893-11e6-9cba-df01e8eaac01.png)
-![installer](https://cloud.githubusercontent.com/assets/157738/20834139/cb8de0a0-b893-11e6-995f-3bd7e0b60b16.png)
-![installer](https://cloud.githubusercontent.com/assets/157738/20834136/cb8c2940-b893-11e6-97f8-289e902a68ee.png)
-![installer](https://cloud.githubusercontent.com/assets/157738/20837059/9b65aa3e-b8a2-11e6-892a-82a0e8083ab3.png)
+![mikado](https://cloud.githubusercontent.com/assets/157738/21269257/54795560-c3b2-11e6-90d9-8432dcb38e01.gif)
 
 ### Manual setup
 
