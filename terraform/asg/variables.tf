@@ -3,7 +3,7 @@ variable "name" {
 }
 
 variable "vpc_id" {
-  tpye = "string"
+  type = "string"
 }
 
 variable "availability_zones" {
@@ -19,7 +19,7 @@ variable "private_subnets" {
 }
 
 variable "ami_id" {
-  tpye = "string"
+  type = "string"
 }
 
 variable "instance_type" {

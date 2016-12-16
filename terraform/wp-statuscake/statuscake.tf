@@ -3,11 +3,13 @@ variable "domain" {
 }
 
 variable "username" {
-  type = "string"
+  type    = "string"
+  default = ""
 }
 
 variable "apikey" {
-  type = "string"
+  type    = "string"
+  default = ""
 }
 
 provider "statuscake" {
