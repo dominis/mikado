@@ -29,16 +29,23 @@ dialogs:
   success: |
     If you see this message it means everything is honky-donkey
 
+  cdn:
+    title: Please select the CDN you want to use
+    components:
+      - No CDN
+      - Fastly
+      - Cloudfront
+      - Cloudflare
   optional:
     title: Please select the components you want to install
     msg: All options are optional
     components:
-      - Fastly
       - Statuscake
       - Datadog
       - Loggly
       - Newrelic
       - Slack
+
   Mikado:
     AWS_ACCESS_KEY_ID:
       msg: |
@@ -79,12 +86,6 @@ dialogs:
 
         More info: https://github.com/dominis/mikado/blob/master/env.mk.template#L28-L31
       default: t2.micro
-  Fastly:
-    TF_VAR_fastly_api_key:
-      msg: |
-        Please enter your Fastly API key
-
-        You can find it at: https://manage.fastly.com/account
   Statuscake:
     TF_VAR_statuscake_username:
       msg: |
@@ -128,6 +129,19 @@ dialogs:
         Please enter the Slack channel you want to post noficiations
 
         eg: #mikado-rulez
+  Cloudflare:
+    TF_VAR_cloudflare_email:
+      msg: |
+        Please enter your Cloudflare email
+    TF_VAR_cloudflare_token:
+      msg: |
+        Please enter your Cloudflare token
+  Fastly:
+    TF_VAR_fastly_api_key:
+      msg: |
+        Please enter your Fastly API key
+
+        You can find it at: https://manage.fastly.com/account
 
 
 

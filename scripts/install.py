@@ -24,12 +24,36 @@ with open("./scripts/install.yaml", 'r') as stream:
 
 dialogs = yamlconfig.get('dialogs')
 
+def dialog_wrapper(type, *args, **kwargs):
+    r = getattr(d, type)(*args, **kwargs)
+
+    # this is needed for the info dialog
+    # where the return value is a string
+    # instead of a tuple
+    if isinstance(r, str):
+        return [r]
+
+    # exit when click on Cancel
+    if r[0] != d.OK:
+        sys.exit(1)
+
+    return r[1]
+
+
+def d_radiolist(name):
+    """
+    CDN selector
+    """
+    return dialog_wrapper('radiolist',
+        dialogs.get(name).get('title'),
+        choices=[(a, "", False if i > 0 else True) for i, a in enumerate(dialogs.get(name).get('components'))]
+    )
 
 def d_optional():
     """
     Component selector
     """
-    return d.checklist(
+    return dialog_wrapper('checklist',
       dialogs.get('optional').get('msg'),
       choices=[(a, "", False) for a in dialogs.get('optional').get('components')],
       title=dialogs.get('optional').get('title')
@@ -54,12 +78,10 @@ def d_inputs(fields):
                     ).read().decode('ascii').strip()
                 )
 
-            c, output[field][fd] = d.inputbox(
+            output[field][fd] = dialog_wrapper('inputbox',
               dialogs.get(field).get(fd).get('msg'),
               init=def_value
             )
-            if c != d.OK:
-                return False
 
     return output
 
@@ -68,14 +90,14 @@ def d_error(msg):
     """
     Error dialog
     """
-    d.msgbox(dialogs.get('errors').get(msg))
+    dialog_wrapper('msgbox', dialogs.get('errors').get(msg))
     sys.exit(1)
 
 def d_info(dialog):
     """
     Info dialog
     """
-    d.msgbox(dialogs.get(dialog))
+    return dialog_wrapper('msgbox', dialogs.get(dialog))
 
 def write_config(config):
     """
@@ -129,7 +151,8 @@ def install():
     # Display welcome screen
     d_info('welcome')
 
-    c, optional_fileds = d_optional()
+    optional_fileds = d_optional()
+
     # get required data and validate it
     base_data = d_inputs(['Mikado'])
     if len([a for a in base_data.get('Mikado').values() if not a]):
@@ -138,8 +161,21 @@ def install():
 
     optional_data = d_inputs(optional_fileds)
 
+    cdn = d_radiolist('cdn')
+
+    if cdn == "No CDN":
+        cdn_data = dict()
+    elif cdn == "Cloudfront":
+        cdn_data = dict({'Cloudfront': True})
+    else:
+        cdn_data = d_inputs([cdn])
+
     config = base_data.copy()
     config.update(optional_data)
+    config.update(cdn_data)
+
+    print(config)
+    sys.exit(1)
 
     write_config(config)
 
@@ -154,8 +190,10 @@ def install():
     d_info('tfmikado')
     create_tf(
         domain=config.get('Mikado').get('domain'),
-        fastly=len(list(filter(None, config.get('Datadog', {}).values()))),
-        statuscake=len(list(filter(None, config.get('Datadog', {}).values())))
+        cloudfront=len(list(filter(None, config.get('cloudfront', {}).values()))),
+        fastly=len(list(filter(None, config.get('fastly', {}).values()))),
+        cloudflare=len(list(filter(None, config.get('cloudflare', {}).values()))),
+        statuscake=len(list(filter(None, config.get('statuscake', {}).values())))
     )
 
     execute('make apply')
@@ -164,8 +202,12 @@ def install():
 
 
 def main():
-    install()
-
+    try:
+        install()
+    except (KeyboardInterrupt, SystemExit):
+        pass
+    except:
+        raise
 
 if __name__ == '__main__':
     main()
