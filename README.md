@@ -1,25 +1,4 @@
-> [!CAUTION]
->
-> 
-> Dear Visitor,
-> This repository has been archived.
-> 
-> Experiencing issues with your cloud? Need help with version updates, cost management, scaling, disaster recovery, etc.?
->
-> If so, please visit https://ber.sh. This is what I’m working on today.
-> 
-> I hope I can make your life a little bit easier.
-> 
-> Thank you,
-> 
-> Nandor Sivok
-> 
-
-# ⬆︎⬆︎⬆︎⬆︎ READ THIS FIRST ⬆︎⬆︎⬆︎⬆︎ <3
--------
-
-
-# Mikado
+# Mikado\
 
 ## Intro
 
